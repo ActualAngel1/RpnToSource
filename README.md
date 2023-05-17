@@ -27,3 +27,13 @@ but backwards.
 
 Will support:
 All kinds of expressions and grouping inferring (The bytecode has no grouping, but the original source code does)
+
+
+
+
+Input/Output Examples:
+
+input: 3 5 4 * + 15 3 * + 2 -
+output: (((3 + (5 * 4)) + (15 * 3)) - 2)
+
+(Will remove redundent parentheses in the future)
