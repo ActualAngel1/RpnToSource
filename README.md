@@ -10,6 +10,15 @@ I had to come up with an expression decompiler for a decompiler for a stack base
 in its nature the bytecode is very similar to rpn so i assumed all bytecode expression code as valid rpn code
 and converted it to an ast, and from there, to valid source code.
 
+The pipeline:
+Main is used to get an RPN expression from the console 
+forwards the RPN to a lexer to produce tokens ->
+token printer in main ->
+Tokens to ast ->
+ast printer in main ->
+Ast to source code ->
+source code print in main.
+
 The algorithm:
 This is a very basic algorithm I came up with on 3 hours of sleep
 The grouping inferring algorithm will probably be precedence anomaly detection, with inspiration from the shunting yard algorithm,
