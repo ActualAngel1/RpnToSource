@@ -1,12 +1,8 @@
 import java.io.IOException;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Main {
     public static void main(String[] args) throws IOException{
@@ -26,31 +22,49 @@ public class Main {
 
     }
 
-    private static void run(String source) {
-        Lexer lexer = new Lexer(source);
+    private static void run(String rpn) {
+        Lexer lexer = new Lexer(rpn);
         List<Token> tokens = lexer.sourceToTokens();
+
+        printTokens(tokens);
+
+        Expr ast = RpnToAst.convert(tokens);
+
+        printAst(ast);
+
+        AstToSource astToSource = new AstToSource(ast);
+
+        printSource(astToSource);
+    }
+
+    public static void print(String string) {
+        System.out.println();
+        System.out.println(string);
+        System.out.println();
+    }
+
+    public static void printTokens(List<Token> tokens) {
+        System.out.println();
 
         System.out.println("Printing the tokens: ");
 
         for (Token token : tokens) {
-            System.out.println("Token: " + ((token.lexeme == " ") ? "EOF" : token.lexeme) + " " + token.type);
+            System.out.println("Token: " +
+                    ((Objects.equals(token.lexeme, " ")) ? "EOF" : token.lexeme) +
+                    " " + token.type);
         }
+    }
 
-        new RpnToAst();
-        Expr ast = RpnToAst.convert(tokens);
-
-        System.out.println();
-        System.out.println("Printing the ast");
-        System.out.println();
+    public static void printAst(Expr ast) {
+        print("Printing the ast");
 
         AstPrinter printer = new AstPrinter();
         System.out.println(printer.print(ast));
+    }
 
-        System.out.println();
-        System.out.println("Restructuring source code");
-        System.out.println();
+    public static void printSource(AstToSource source) {
+        print("Restructuring source code");
 
-        AstToSource astToSource = new AstToSource(ast);
-        System.out.println(astToSource.getSource());
+        System.out.println(source.getSource());
     }
 }

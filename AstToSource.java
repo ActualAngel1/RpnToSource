@@ -1,5 +1,3 @@
-import java.beans.Expression;
-
 public class AstToSource {
     Expr ast;
     String source = "";
@@ -22,7 +20,7 @@ public class AstToSource {
             String leftSource = reconstructSource(leftOperand);
             String rightSource = reconstructSource(rightOperand);
 
-            return "(" + leftSource + " " + operator.lexeme + " " + rightSource + ")";
+            return leftSource + " " + operator.lexeme + " " + rightSource;
 
         } else if (expr instanceof Expr.Literal literal) {
             return Integer.toString(literal.value);

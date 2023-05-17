@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.HashMap;
 
 public class Lexer {
     private final String source;
@@ -30,9 +29,7 @@ public class Lexer {
             case '-': addToken(Token.Type.MINUS); break;
             case '*': addToken(Token.Type.STAR); break;
             case '/': addToken(Token.Type.SLASH); break;
-            case ' ': break;
-            case '\r': break;
-            case '\t': break;
+            case ' ', '\r', '\t': break;
             case '\n':
                 line++;
                 break;
