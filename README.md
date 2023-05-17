@@ -34,6 +34,5 @@ All kinds of expressions and grouping inferring (The bytecode has no grouping, b
 Input/Output Examples:
 
 input: 3 5 4 * + 15 3 * + 2 -
-output: 3 + 5 * 4 + 15 * 3 - 2
 
-(Will remove redundent parentheses in the future)
+output: 3 + 5 * 4 + 15 * 3 - 2
