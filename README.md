@@ -39,3 +39,7 @@ output: 3 + 5 * 4 + 15 * 3 - 2
 input: 3 5 + 10 *
 
 output: (3 + 5) * 10     # infers grouping
+
+input: 3 10 + 6 10 + *
+
+output: (3 + 10) * (6 + 10)
