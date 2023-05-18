@@ -32,9 +32,7 @@ public class Main {
 
         printAst(ast);
 
-        AstToSource astToSource = new AstToSource(ast);
-
-        printSource(astToSource);
+        printSource(ast);
     }
 
     public static void print(String string) {
@@ -44,9 +42,7 @@ public class Main {
     }
 
     public static void printTokens(List<Token> tokens) {
-        System.out.println();
-
-        System.out.println("Printing the tokens: ");
+        print("Printing the tokens: ");
 
         for (Token token : tokens) {
             System.out.println("Token: " +
@@ -62,9 +58,9 @@ public class Main {
         System.out.println(printer.print(ast));
     }
 
-    public static void printSource(AstToSource source) {
+    public static void printSource(Expr ast) {
         print("Restructuring source code");
 
-        System.out.println(source.getSource());
+        System.out.println(new AstToSource().transform(ast));
     }
 }

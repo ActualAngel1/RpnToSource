@@ -4,7 +4,7 @@ public final class RpnToAst {
     private static final Map<Token.Type, Integer> map;
 
     static {
-        /*
+         /*
                 PREC_NONE,
                 PREC_ASSIGNMENT,  // =
                 PREC_OR,          // or
@@ -37,11 +37,14 @@ public final class RpnToAst {
 
         for (Token token : tokens) {
             if (token.type == Token.Type.EOF) break;
+            // Checks if its a literal
             else if (!map.containsKey(token.type)) {
                 stack.push(new Expr.Literal(Integer.parseInt(token.lexeme)));
             }
-            else if ((token.type == Token.Type.BANG) || ((token.type == Token.Type.MINUS) && (stack.size() == 1))) { // Checks if its a unary expression
+            // Checks if its a unary expression
+            else if ((token.type == Token.Type.BANG) || ((token.type == Token.Type.MINUS) && (stack.size() == 1))) {
                 stack.push(new Expr.Unary(token, stack.pop()));
+            // Else, its a binary expression (currently)
             } else {
 
                     if (stack.size() < 2) {
