@@ -31,7 +31,7 @@ All kinds of expressions
 
 
 Input/Output Examples:
-
+---
 input: 3 5 4 * + 15 3 * + 2 -
 
 output: 3 + 5 * 4 + 15 * 3 - 2
@@ -47,3 +47,9 @@ output: (3 + 10) * (6 + 10)
 input: 8 7 + 11 * 4 3 + > ! 
 
 output: !((8 + 7) * 11 > 4 + 3)
+
+Original: - ((8+9)* 11 - 9 + 5);
+
+input: 8 9 + 11 * 9 - 5+ -
+
+output: -((8 + 9) * 11 - 9 + 5)
