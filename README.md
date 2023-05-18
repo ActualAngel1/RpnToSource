@@ -4,6 +4,7 @@ this is a really simple expression decompiler that takes in an rpn representatio
 I will expend on it in the future
 
 Initial version supports: Binary expressions and literals
+Now supports grouping inferring
 
 Motivation:
 I had to come up with an expression decompiler for a decompiler for a stack based language, 
@@ -26,9 +27,7 @@ but backwards.
 (I will expend on this in the future)
 
 Will support:
-All kinds of expressions and grouping inferring (The bytecode has no grouping, but the original source code does)
-
-
+All kinds of expressions
 
 
 Input/Output Examples:
@@ -36,3 +35,7 @@ Input/Output Examples:
 input: 3 5 4 * + 15 3 * + 2 -
 
 output: 3 + 5 * 4 + 15 * 3 - 2
+
+input: 3 5 + 10 *
+
+output: (3 + 5) * 10     # infers grouping
