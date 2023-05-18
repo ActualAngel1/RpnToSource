@@ -4,6 +4,7 @@ public class Token {
         MINUS, PLUS, SLASH, STAR,
 
         NUMBER,
+        LEFTPAREN, RIGHTPAREN,
 
         EOF
     }

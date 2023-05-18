@@ -1,10 +1,16 @@
-import java.util.EmptyStackException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public final class RpnToAst {
+    private static final HashMap<Token.Type, Integer> map = new HashMap<>();
+    static {
+        map.put(Token.Type.PLUS, 5);
+        map.put(Token.Type.MINUS, 5);
+        map.put(Token.Type.STAR, 4);
+        map.put(Token.Type.SLASH, 4);
+    }
+
     static public Expr convert(List<Token> tokens) {
+        int current = 0;
         Stack<Expr> stack = new Stack<>();
         HashSet<Token.Type> set = new HashSet<>();
         set.add(Token.Type.MINUS);
@@ -14,7 +20,6 @@ public final class RpnToAst {
 
         for (Token token : tokens) {
                 if (token.type == Token.Type.EOF) break;
-
                 if (!set.contains(token.type)) {
                     stack.push(new Expr.Literal(Integer.parseInt(token.lexeme)));
                 } else {
@@ -26,9 +31,23 @@ public final class RpnToAst {
                     }
 
                     Expr rightNode = stack.pop();
+                    if (rightNode instanceof Expr.Binary rightExpr) {
+                        if (map.get(rightExpr.operator.type) > map.get(token.type)) {
+                            rightNode = new Expr.Grouping(rightNode);
+                        }
+                    }
+
                     Expr leftNode = stack.pop();
+                    if (leftNode instanceof Expr.Binary leftExpr) {
+                        if (map.get(leftExpr.operator.type) > map.get(token.type)) {
+                            leftNode = new Expr.Grouping(leftNode);
+                        }
+                    }
+
                     stack.push(new Expr.Binary(leftNode, token, rightNode));
                 }
+
+                current++;
         }
 
         return stack.pop();

@@ -11,7 +11,7 @@ public class AstToSource {
         return this.source;
     }
 
-    public String reconstructSource(Expr expr) {
+    public static String reconstructSource(Expr expr) {
         if (expr instanceof Expr.Binary binaryExpr) {
             Expr leftOperand = binaryExpr.left;
             Expr rightOperand = binaryExpr.right;
@@ -24,6 +24,8 @@ public class AstToSource {
 
         } else if (expr instanceof Expr.Literal literal) {
             return Integer.toString(literal.value);
+        } else if (expr instanceof Expr.Grouping grouping) {
+            return "(" + reconstructSource(grouping.expression) + ")";
         }
 
         return "";

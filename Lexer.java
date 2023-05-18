@@ -29,6 +29,8 @@ public class Lexer {
             case '-': addToken(Token.Type.MINUS); break;
             case '*': addToken(Token.Type.STAR); break;
             case '/': addToken(Token.Type.SLASH); break;
+            case '(': addToken(Token.Type.LEFTPAREN); break;
+            case ')': addToken(Token.Type.RIGHTPAREN); break;
             case ' ', '\r', '\t': break;
             case '\n':
                 line++;
