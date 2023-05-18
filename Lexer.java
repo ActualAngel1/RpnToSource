@@ -31,6 +31,17 @@ public class Lexer {
             case '/': addToken(Token.Type.SLASH); break;
             case '(': addToken(Token.Type.LEFTPAREN); break;
             case ')': addToken(Token.Type.RIGHTPAREN); break;
+            case '!': addToken(match('=') ? Token.Type.BANG_EQUAL : Token.Type.BANG);
+                break;
+            case '=':
+                addToken(match('=') ? Token.Type.EQUAL_EQUAL : Token.Type.EQUAL);
+                break;
+            case '<':
+                addToken(match('=') ? Token.Type.LESS_EQUAL : Token.Type.LESS);
+                break;
+            case '>':
+                addToken(match('=') ? Token.Type.GREATER_EQUAL : Token.Type.GREATER);
+                break;
             case ' ', '\r', '\t': break;
             case '\n':
                 line++;
@@ -41,7 +52,12 @@ public class Lexer {
                 else throw new RuntimeException("The source text is invalid");
         }
     }
-
+    private boolean match(char expected) {
+        if (isAtEnd()) return false;
+        if (source.charAt(current) != expected) return false;
+        current++;
+        return true;
+    }
     private boolean isDigit(char c) {
         return c >= '0' && c <= '9';
     }

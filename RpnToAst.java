@@ -1,28 +1,48 @@
 import java.util.*;
 
 public final class RpnToAst {
-    private static final HashMap<Token.Type, Integer> map = new HashMap<>();
+    private static final Map<Token.Type, Integer> map;
+
     static {
-        map.put(Token.Type.PLUS, 5);
-        map.put(Token.Type.MINUS, 5);
-        map.put(Token.Type.STAR, 4);
-        map.put(Token.Type.SLASH, 4);
+        /*
+                PREC_NONE,
+                PREC_ASSIGNMENT,  // =
+                PREC_OR,          // or
+                PREC_AND,         // and
+                PREC_EQUALITY,    // == !=
+                PREC_COMPARISON,  // < > <= >=
+                PREC_TERM,        // + -
+                PREC_FACTOR,      // * /
+                PREC_UNARY,       // ! -
+                PREC_CALL,        // . ()
+                PREC_PRIMARY
+         */
+        map = new HashMap<>();
+        map.put(Token.Type.EQUAL, 10);
+        map.put(Token.Type.BANG_EQUAL, 6);
+        map.put(Token.Type.EQUAL_EQUAL, 6);
+        map.put(Token.Type.GREATER_EQUAL, 5);
+        map.put(Token.Type.LESS_EQUAL, 5);
+        map.put(Token.Type.GREATER, 5);
+        map.put(Token.Type.LESS, 5);
+        map.put(Token.Type.PLUS, 4);
+        map.put(Token.Type.MINUS, 4);
+        map.put(Token.Type.STAR, 3);
+        map.put(Token.Type.SLASH, 3);
+        map.put(Token.Type.BANG, 2);
     }
 
     static public Expr convert(List<Token> tokens) {
-        int current = 0;
         Stack<Expr> stack = new Stack<>();
-        HashSet<Token.Type> set = new HashSet<>();
-        set.add(Token.Type.MINUS);
-        set.add(Token.Type.PLUS);
-        set.add(Token.Type.SLASH);
-        set.add(Token.Type.STAR);
 
         for (Token token : tokens) {
-                if (token.type == Token.Type.EOF) break;
-                if (!set.contains(token.type)) {
-                    stack.push(new Expr.Literal(Integer.parseInt(token.lexeme)));
-                } else {
+            if (token.type == Token.Type.EOF) break;
+            else if (!map.containsKey(token.type)) {
+                stack.push(new Expr.Literal(Integer.parseInt(token.lexeme)));
+            }
+            else if ((token.type == Token.Type.BANG) || ((token.type == Token.Type.MINUS) && (stack.size() == 1))) { // Checks if its a unary expression
+                stack.push(new Expr.Unary(token, stack.pop()));
+            } else {
 
                     if (stack.size() < 2) {
                         System.out.println();
@@ -46,9 +66,7 @@ public final class RpnToAst {
 
                     stack.push(new Expr.Binary(leftNode, token, rightNode));
                 }
-
-                current++;
-        }
+            }
 
         return stack.pop();
     }

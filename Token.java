@@ -5,6 +5,10 @@ public class Token {
 
         NUMBER,
         LEFTPAREN, RIGHTPAREN,
+        BANG, BANG_EQUAL,
+        EQUAL, EQUAL_EQUAL,
+        GREATER, GREATER_EQUAL,
+        LESS, LESS_EQUAL,
 
         EOF
     }

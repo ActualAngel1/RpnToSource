@@ -26,6 +26,8 @@ public class AstToSource {
             return Integer.toString(literal.value);
         } else if (expr instanceof Expr.Grouping grouping) {
             return "(" + reconstructSource(grouping.expression) + ")";
+        } else if (expr instanceof Expr.Unary unary) {
+            return unary.operator.lexeme + "(" + reconstructSource(unary.right) + ")";
         }
 
         return "";
