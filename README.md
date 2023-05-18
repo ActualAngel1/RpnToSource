@@ -43,3 +43,7 @@ output: (3 + 5) * 10     # infers grouping
 input: 3 10 + 6 10 + *
 
 output: (3 + 10) * (6 + 10)
+
+input: 8 7 + 11 * 4 3 + > ! 
+
+output: !((8 + 7) * 11 > 4 + 3)
