@@ -37,40 +37,53 @@ public final class RpnToAst {
 
         for (Token token : tokens) {
             if (token.type == Token.Type.EOF) break;
-            // Checks if its a literal
+
             else if (!map.containsKey(token.type)) {
-                stack.push(new Expr.Literal(Integer.parseInt(token.lexeme)));
-            }
-            // Checks if its a unary expression
-            else if ((token.type == Token.Type.BANG) || ((token.type == Token.Type.MINUS) && (stack.size() == 1))) {
-                stack.push(new Expr.Unary(token, stack.pop()));
-            // Else, its a binary expression (currently)
+                literal(stack, token);
+            } else if (isUnary(stack, token)) {
+                unary(stack, token);
             } else {
-
-                    if (stack.size() < 2) {
-                        System.out.println();
-                        System.out.println("This is not a valid RPN representation");
-                        break;
-                    }
-
-                    Expr rightNode = stack.pop();
-                    if (rightNode instanceof Expr.Binary rightExpr) {
-                        if (map.get(rightExpr.operator.type) > map.get(token.type)) {
-                            rightNode = new Expr.Grouping(rightNode);
-                        }
-                    }
-
-                    Expr leftNode = stack.pop();
-                    if (leftNode instanceof Expr.Binary leftExpr) {
-                        if (map.get(leftExpr.operator.type) > map.get(token.type)) {
-                            leftNode = new Expr.Grouping(leftNode);
-                        }
-                    }
-
-                    stack.push(new Expr.Binary(leftNode, token, rightNode));
-                }
+                binary(stack, token);
             }
+        }
 
         return stack.pop();
     }
+
+    private static void literal(Stack<Expr> stack, Token token) {
+        stack.push(new Expr.Literal(Integer.parseInt(token.lexeme)));
+    }
+
+    private static boolean isUnary(Stack<Expr> stack, Token token) {
+        return (token.type == Token.Type.BANG) ||
+                    ((token.type == Token.Type.MINUS) && (stack.size() == 1));
+    }
+
+    private static void unary(Stack<Expr> stack, Token token) {
+        stack.push(new Expr.Unary(token, stack.pop()));
+    }
+
+    private static void binary(Stack<Expr> stack, Token token) {
+        if (stack.size() < 2) {
+            throw new RuntimeException("This is not a valid RPN Representation");
+        }
+
+        // Applying grouping inferring on left and right nodes
+        Expr rightNode = stack.pop();
+        if (rightNode instanceof Expr.Binary rightExpr) {
+            if (map.get(rightExpr.operator.type) > map.get(token.type)) {
+                rightNode = new Expr.Grouping(rightNode);
+            }
+        }
+
+        Expr leftNode = stack.pop();
+        if (leftNode instanceof Expr.Binary leftExpr) {
+            if (map.get(leftExpr.operator.type) > map.get(token.type)) {
+                leftNode = new Expr.Grouping(leftNode);
+            }
+        }
+
+        stack.push(new Expr.Binary(leftNode, token, rightNode));
+    }
+
 }
